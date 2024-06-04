@@ -4,9 +4,9 @@
   "description": "Demo portal DevJobs with NodeJS, Handlebars, Mongoose",
   "main": "app.js",
   "scripts": {
-    "start":"concurrently \"npm run dev\" \"npm run watch\"  ",
+    "start": "concurrently \"npm run dev\" \"npm run watch\"  ",
     "dev": "nodemon ./app.js",
-    "watch":"webpack --watch --mode development"
+    "watch": "webpack --watch --mode development"
   },
   "keywords": [
     "NodeJS",
@@ -15,14 +15,19 @@
   "author": "Jesus E. Fernandez M.",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "concurrently": "^8.2.2",
+    "connect-flash": "^0.1.1",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-handlebars": "^7.1.2",
     "express-session": "^1.18.0",
+    "express-validator": "5.3.1",
     "mongoose": "^8.4.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "shortid": "^2.2.16",
     "slug": "^9.1.0"
   },

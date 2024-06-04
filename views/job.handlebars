@@ -1,0 +1,37 @@
+<div class="contenido-superior vacante contenedor">
+    <div class="caja">
+        <p class="etiqueta">Empresa</p>
+        <p class="nombre">{{job.company}}</p>
+    </div>
+    <div class="caja">
+        <p class="etiqueta">Location</p>
+        <p class="nombre">{{job.location}}</p>
+    </div>
+    <div class="caja">
+        <p class="etiqueta">Contract</p>
+        <p class="nombre">{{job.contract}}</p>
+    </div>
+    <div class="caja">
+        <p class="etiqueta">Salary</p>
+        <p class="nombre">$ {{job.salary}}</p>
+    </div>
+</div>
+
+<div class="vacante-contenedor contenedor">
+    <main class="contenido">
+        <h2>Job Description</h2>
+        <div class="vacante-descripcion">
+            {{{job.description}}}
+        </div>
+
+        <a href="/jobs/edit/{{job.url}}" class="btn btn-azul editar-btn">Edit Job</a>
+    </main>
+    <aside class="sidebar">
+        <h2>Skills</h2>
+        <ul class="skills">
+            {{#each job.skills}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </aside>
+</div>

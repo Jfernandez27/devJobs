@@ -8,7 +8,7 @@ const jobsSchema = new mongoose.Schema({
         type: String,
         required: 'Company name is required',
         trim: true,
-        minLength: 10,
+        minLength: 5,
     },
     company: { type: String, trim: true },
     location: { type: String, trim: true, required: 'Location is mandatory' },

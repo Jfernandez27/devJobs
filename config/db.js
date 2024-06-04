@@ -9,3 +9,4 @@ mongoose.connection.on('error', (error) => {
 
 //Model Import
 require('../models/Job');
+require('../models/Users');

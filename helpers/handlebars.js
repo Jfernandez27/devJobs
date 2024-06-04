@@ -44,7 +44,7 @@ module.exports = {
 
         return (options.fn().html = html);
     },
-    tipoContrato: (selected, options) => {
+    typeContract: (selected, options) => {
         return options
             .fn(this)
             .replace(
@@ -52,7 +52,7 @@ module.exports = {
                 '$& selected="selected"'
             );
     },
-    mostrarAlertas: (errors = {}, alerts) => {
+    showAlerts: (errors = {}, alerts) => {
         const category = Object.keys(errors);
 
         let html = '';

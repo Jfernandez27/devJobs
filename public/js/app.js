@@ -2,8 +2,17 @@ const { set } = require('mongoose');
 
 document.addEventListener('DOMContentLoaded', () => {
     const skills = document.querySelector('.lista-conocimientos');
+
+    //Clean Alerts
+    let alerts = document.querySelector('.alertas');
+    if (alerts) {
+        cleanAlerts();
+    }
+
     if (skills) {
         skills.addEventListener('click', addSkills);
+
+        selectedSkills();
     }
 });
 const skills = new Set();
@@ -19,4 +28,29 @@ const addSkills = (e) => {
     }
     const skillsArray = [...skills];
     document.querySelector('#skills').value = skillsArray;
+};
+
+const selectedSkills = () => {
+    const selected = Array.from(
+        document.querySelectorAll('.lista-conocimientos .activo')
+    );
+
+    selected.forEach((choosen) => {
+        skills.add(choosen.textContent);
+    });
+
+    const skillsArray = [...skills];
+    document.querySelector('#skills').value = skillsArray;
+};
+
+const cleanAlerts = () => {
+    const alerts = document.querySelector('.alertas');
+    const interval = setInterval(() => {
+        if (alerts.children.length > 0) {
+            alerts.removeChild(alerts.children[0]);
+        } else if (alerts.children.length === 0) {
+            alerts.parentElement.removeChild(alerts);
+            clearInterval(interval);
+        }
+    }, 2000);
 };
