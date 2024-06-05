@@ -33,6 +33,8 @@ module.exports = () => {
     router.post('/login', authController.auth);
     router.post('/recovery', usersController.passwordRecovery);
 
+    router.get('/logout', authController.verifyUser, authController.logout);
+
     //Admin Panel
     router.get('/admin', authController.verifyUser, authController.admin);
 
@@ -41,6 +43,11 @@ module.exports = () => {
         '/profile/edit',
         authController.verifyUser,
         usersController.profileEdit
+    );
+    router.post(
+        '/profile/edit',
+        authController.verifyUser,
+        usersController.profileUpdate
     );
 
     return router;

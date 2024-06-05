@@ -62,13 +62,31 @@ exports.login = async (req, res, next) => {
     });
 };
 
-exports.profileEdit = (req, res, next) => {
-    const user = req.user;
+exports.profileEdit = async (req, res, next) => {
+    const user = await User.findById(req.user._id).lean();
+
     res.render('profileEdit', {
         pageTitle: 'Profile Edit',
         user,
+        endSession: true,
+        userName: user.name,
     });
 };
+
+exports.profileUpdate = async (req, res, next) => {
+    const user = await User.findById(req.user._id);
+
+    user.name = req.body.name;
+    user.email = req.body.email;
+    if (req.body.password) {
+        user.password = req.body.password;
+    }
+    await user.save();
+
+    req.flash('correcto', 'Profile Updated!!!!');
+    res.redirect('/admin');
+};
+
 exports.passwordRecovery = async (req, res, next) => {
     return next();
 };

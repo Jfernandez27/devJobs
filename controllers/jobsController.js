@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
 const Job = mongoose.model('Job');
-exports.newJob = (req, res) => {
+const User = require('../models/Users');
+
+exports.newJob = async (req, res) => {
+    const user = await User.findById(req.user._id);
     res.render('newJob', {
         pageTitle: 'New Job',
         tagLine: 'Fill out the form and publish your job vacancy',
-        // nav: true,
+        nav: false,
         // button: true,
+        endSession: true,
+        userName: user.name,
     });
 };
 exports.showJob = async (req, res, next) => {
@@ -35,15 +40,17 @@ exports.addJob = async (req, res) => {
 };
 
 exports.editJob = async (req, res, next) => {
-    const job = await Job.findOne({ url: req.params.url }).lean();
+    const job = await Job.findOne({ url: req.params.url });
+    const user = await User.findById(req.user._id);
 
     if (!job) return next();
 
     res.render('editJob', {
         pageTitle: `Edit - ${job.title}`,
         job,
-        nav: true,
-        // button: true,
+        nav: false,
+        endSession: true,
+        userName: user.name,
     });
 };
 exports.updateJob = async (req, res, next) => {

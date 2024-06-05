@@ -32,7 +32,13 @@ app.use(expressValidator());
 //         helpers: require('./helpers/handlebars'),
 //     })
 // );
-app.engine('handlebars', engine({ helpers: require('./helpers/handlebars') }));
+app.engine(
+    'handlebars',
+    engine({
+        helpers: require('./helpers/handlebars'),
+        allowedProtoMethods: true,
+    })
+);
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
