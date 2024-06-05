@@ -40,8 +40,8 @@ exports.addJob = async (req, res) => {
 };
 
 exports.editJob = async (req, res, next) => {
-    const job = await Job.findOne({ url: req.params.url });
-    const user = await User.findById(req.user._id);
+    const job = await Job.findOne({ url: req.params.url }).lean();
+    const user = await User.findById(req.user._id).lean();
 
     if (!job) return next();
 
@@ -70,4 +70,46 @@ exports.updateJob = async (req, res, next) => {
     );
 
     res.redirect(`/jobs/${updatedJob.url}`);
+};
+
+exports.validateJob = async (req, res, next) => {
+    const user = await User.findById(req.user._id);
+
+    //sanitize
+    req.sanitizeBody('title').escape();
+    req.sanitizeBody('company').escape();
+    req.sanitizeBody('location').escape();
+    req.sanitizeBody('salary').escape();
+    req.sanitizeBody('contract').escape();
+    req.sanitizeBody('skills').escape();
+
+    //Validate
+    req.checkBody('title', 'Add a title for the job').notEmpty();
+    req.checkBody('company', 'Add a company for the job').notEmpty();
+    req.checkBody('location', 'Add a location for the job').notEmpty();
+    req.checkBody('contract', 'Select a valid contract type').notEmpty();
+    req.checkBody('skills', 'Add at least one skill').notEmpty();
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        req.flash(
+            'error',
+            errors.map((error) => error.msg)
+        );
+        res.render('newJob', {
+            pageTitle: 'New Job',
+            tagLine: 'Fill out the form and publish your job vacancy',
+            nav: false,
+            // button: true,
+            endSession: true,
+            userName: user.name,
+            messages: req.flash(),
+            job: req.body,
+        });
+
+        return;
+    }
+
+    next();
 };

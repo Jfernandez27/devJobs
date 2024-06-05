@@ -10,7 +10,12 @@ module.exports = () => {
     router.get('/', homeController.showJobs);
 
     router.get('/jobs/new', authController.verifyUser, jobsController.newJob);
-    router.post('/jobs/new', jobsController.addJob);
+    router.post(
+        '/jobs/new',
+        authController.verifyUser,
+        jobsController.validateJob,
+        jobsController.addJob
+    );
 
     router.get('/jobs/:url', jobsController.showJob);
 
@@ -22,6 +27,7 @@ module.exports = () => {
     router.post(
         '/jobs/updateJob/:url',
         authController.verifyUser,
+        jobsController.validateJob,
         jobsController.updateJob
     );
 
@@ -47,6 +53,7 @@ module.exports = () => {
     router.post(
         '/profile/edit',
         authController.verifyUser,
+        usersController.validateProfile,
         usersController.profileUpdate
     );
 

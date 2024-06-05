@@ -90,3 +90,39 @@ exports.profileUpdate = async (req, res, next) => {
 exports.passwordRecovery = async (req, res, next) => {
     return next();
 };
+
+exports.validateProfile = async (req, res, next) => {
+    const user = await User.findById(req.user._id).lean();
+
+    //sanitize
+    req.sanitizeBody('name').escape();
+    req.sanitizeBody('email').escape();
+    if (req.body.password) {
+        req.sanitizeBody('password').escape();
+    }
+
+    //Validate
+    req.checkBody('name', 'Name is required').notEmpty();
+    req.checkBody('email', 'Email is required').notEmpty();
+    req.checkBody('email', 'Not a valid Email').isEmail();
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        req.flash(
+            'error',
+            errors.map((error) => error.msg)
+        );
+        res.render('profileEdit', {
+            pageTitle: 'Profile Edit',
+            user,
+            endSession: true,
+            userName: user.name,
+            messages: req.flash(),
+        });
+
+        return;
+    }
+
+    next();
+};
