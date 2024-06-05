@@ -25,6 +25,11 @@ const jobsSchema = new mongoose.Schema({
             cv: String,
         },
     ],
+    author: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: 'Author is mandatory',
+    },
 });
 jobsSchema.pre('save', function (next) {
     const url = slug(this.title);

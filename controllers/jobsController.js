@@ -23,6 +23,8 @@ exports.showJob = async (req, res, next) => {
 exports.addJob = async (req, res) => {
     const job = new Job(req.body);
 
+    job.author = req.user._id;
+
     //Create Skills array
     job.skills = req.body.skills.split(',');
 

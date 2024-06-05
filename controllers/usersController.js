@@ -62,6 +62,13 @@ exports.login = async (req, res, next) => {
     });
 };
 
+exports.profileEdit = (req, res, next) => {
+    const user = req.user;
+    res.render('profileEdit', {
+        pageTitle: 'Profile Edit',
+        user,
+    });
+};
 exports.passwordRecovery = async (req, res, next) => {
     return next();
 };

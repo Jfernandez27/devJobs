@@ -9,13 +9,21 @@ const router = express.Router();
 module.exports = () => {
     router.get('/', homeController.showJobs);
 
-    router.get('/jobs/new', jobsController.newJob);
+    router.get('/jobs/new', authController.verifyUser, jobsController.newJob);
     router.post('/jobs/new', jobsController.addJob);
 
     router.get('/jobs/:url', jobsController.showJob);
 
-    router.get('/jobs/edit/:url', jobsController.editJob);
-    router.post('/jobs/updateJob/:url', jobsController.updateJob);
+    router.get(
+        '/jobs/edit/:url',
+        authController.verifyUser,
+        jobsController.editJob
+    );
+    router.post(
+        '/jobs/updateJob/:url',
+        authController.verifyUser,
+        jobsController.updateJob
+    );
 
     router.get('/register', usersController.register);
     router.post('/register', usersController.validate, usersController.addUser);
@@ -24,6 +32,16 @@ module.exports = () => {
     router.get('/login', usersController.login);
     router.post('/login', authController.auth);
     router.post('/recovery', usersController.passwordRecovery);
+
+    //Admin Panel
+    router.get('/admin', authController.verifyUser, authController.admin);
+
+    // Profiles
+    router.get(
+        '/profile/edit',
+        authController.verifyUser,
+        usersController.profileEdit
+    );
 
     return router;
 };
