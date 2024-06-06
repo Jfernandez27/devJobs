@@ -30,6 +30,11 @@ const jobsSchema = new mongoose.Schema({
         ref: 'User',
         required: 'Author is mandatory',
     },
+    status: {
+        type: String,
+        default: 'active',
+        lowercase: true,
+    },
 });
 jobsSchema.pre('save', function (next) {
     const url = slug(this.title);

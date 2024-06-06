@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Job = mongoose.model('Job');
+const ObjectId = require('mongodb').ObjectId;
+// const {ObjectId} = require('mongodb');
 const User = require('../models/Users');
 
 exports.newJob = async (req, res) => {
@@ -14,7 +16,10 @@ exports.newJob = async (req, res) => {
     });
 };
 exports.showJob = async (req, res, next) => {
-    const job = await Job.findOne({ url: req.params.url }).lean();
+    const job = await Job.findOne(
+        { url: req.params.url },
+        { status: 'Active' }
+    ).lean();
 
     if (!job) return next();
 
@@ -40,7 +45,10 @@ exports.addJob = async (req, res) => {
 };
 
 exports.editJob = async (req, res, next) => {
-    const job = await Job.findOne({ url: req.params.url }).lean();
+    const job = await Job.findOne(
+        { url: req.params.url },
+        { status: 'active' }
+    ).lean();
     const user = await User.findById(req.user._id).lean();
 
     if (!job) return next();
@@ -70,6 +78,24 @@ exports.updateJob = async (req, res, next) => {
     );
 
     res.redirect(`/jobs/${updatedJob.url}`);
+};
+
+exports.delete = async (req, res, next) => {
+    const { id } = req.params;
+    // const id = ObjectId(req.params.id);
+
+    const job = await Job.findById({ id });
+    if (!verifyAuthor(job, req.user)) {
+        res.status(403).send('Error');
+    }
+
+    const removed = Job.findOneAndUpdate({ status: 'deleted' }, job);
+
+    console.log(removed);
+    if (!removed) {
+        res.status(500).send('Algo');
+    }
+    res.status(200).send('Job Deleted');
 };
 
 exports.validateJob = async (req, res, next) => {
@@ -112,4 +138,12 @@ exports.validateJob = async (req, res, next) => {
     }
 
     next();
+};
+
+const verifyAuthor = (job = {}, user = {}) => {
+    if (job.author.equals(user._id)) {
+        return true;
+    } else {
+        return false;
+    }
 };

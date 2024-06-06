@@ -15,6 +15,7 @@
   "author": "Jesus E. Fernandez M.",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "concurrently": "^8.2.2",
     "connect-flash": "^0.1.1",
@@ -29,7 +30,8 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "shortid": "^2.2.16",
-    "slug": "^9.1.0"
+    "slug": "^9.1.0",
+    "sweetalert2": "^11.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.6",

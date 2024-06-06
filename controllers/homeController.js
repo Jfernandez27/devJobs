@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Job = mongoose.model('Job');
 
 exports.showJobs = async (req, res, next) => {
-    const jobs = await Job.find().lean();
+    const jobs = await Job.find({ status: 'Active' }).lean();
 
     if (!jobs) return next();
 

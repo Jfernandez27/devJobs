@@ -1,4 +1,6 @@
-const { set } = require('mongoose');
+// const { set } = require('mongoose');
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 document.addEventListener('DOMContentLoaded', () => {
     const skills = document.querySelector('.lista-conocimientos');
@@ -13,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
         skills.addEventListener('click', addSkills);
 
         selectedSkills();
+    }
+
+    const jobsListed = document.querySelector('.panel-administracion');
+    if (jobsListed) {
+        jobsListed.addEventListener('click', actionsList);
     }
 });
 const skills = new Set();
@@ -53,4 +60,50 @@ const cleanAlerts = () => {
             clearInterval(interval);
         }
     }, 2000);
+};
+
+const actionsList = (e) => {
+    e.preventDefault();
+    if (e.target.dataset.delete) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //Send request by axios
+                const url = `${location.origin}/jobs/delete/${e.target.dataset.delete}`;
+
+                axios
+                    .delete(url, { params: { url } })
+                    .then(function (response) {
+                        if (response.status === 200) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                // text: 'Your file has been deleted.',
+                                text: response.data,
+                                icon: 'success',
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        Swal.fire({
+                            type: 'error',
+                            title: 'There was an error.',
+                            text: 'Could not delete',
+                        });
+                    });
+
+                e.target.parentElement.parentElement.parentElement.removeChild(
+                    e.target.parentElement.parentElement
+                );
+            }
+        });
+    } else if (e.target.tagName === 'A') {
+        window.location.href = e.target.href;
+    }
 };

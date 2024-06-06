@@ -19,7 +19,12 @@ exports.verifyUser = (req, res, next) => {
 };
 
 exports.admin = async (req, res, next) => {
-    const jobs = await Job.find({ author: req.user._id }).lean();
+    const jobs = await Job.find({
+        status: 'Active',
+        author: req.user._id,
+    }).lean();
+
+    console.log(jobs);
     const user = await User.findById(req.user._id);
 
     res.render('admin', {

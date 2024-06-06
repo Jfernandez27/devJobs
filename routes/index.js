@@ -7,8 +7,10 @@ const authController = require('../controllers/authController.js');
 const router = express.Router();
 
 module.exports = () => {
+    //JOBS
     router.get('/', homeController.showJobs);
 
+    //Create
     router.get('/jobs/new', authController.verifyUser, jobsController.newJob);
     router.post(
         '/jobs/new',
@@ -17,8 +19,10 @@ module.exports = () => {
         jobsController.addJob
     );
 
+    //Show
     router.get('/jobs/:url', jobsController.showJob);
 
+    //Edit
     router.get(
         '/jobs/edit/:url',
         authController.verifyUser,
@@ -29,6 +33,13 @@ module.exports = () => {
         authController.verifyUser,
         jobsController.validateJob,
         jobsController.updateJob
+    );
+
+    //Delete
+    router.delete(
+        '/jobs/delete/:id',
+        authController.verifyUser,
+        jobsController.delete
     );
 
     router.get('/register', usersController.register);
